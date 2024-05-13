@@ -3,8 +3,8 @@
 
 ## Platforms Used
 
-- **LINE Developers**: To create and configure the LINEBot.
-- **Google Cloud Functions**: To deploy the Python code and generate a webhook for the LINEBot.
+- **LINE Developers**: To create and configure the LINE Bot.
+- **Google Cloud Functions**: To deploy the Python code and generate a webhook for the LINE Bot.
 
 ## LINEBot Creation
 
@@ -54,4 +54,4 @@ Add four runtime environment variables:
 
 ### Step 4: Deploy
 
-After setting up the function, deploy it. Once deployed, you'll find a 'Trigger URL' that you'll paste back into your LINEBot.
+After setting up the function, deploy it. Once deployed, you'll find a 'Trigger URL' that you'll paste back into your LINE Bot.
