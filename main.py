@@ -1,6 +1,7 @@
-from linebot.v3 import (
-    WebhookHandler
-)
+import logging
+import os
+import json
+from linebot.v3 import WebhookHandler
 from linebot.v3.messaging import (
     Configuration,
     ApiClient,
@@ -9,30 +10,25 @@ from linebot.v3.messaging import (
     TextMessage,
     ShowLoadingAnimationRequest
 )
-import json
-import os
-import requests
-from PIL import Image
-from io import BytesIO
-
 
 # 使用環境變量讀取憑證
 secret = os.getenv('ChannelSecret', None)
 token = os.getenv('ChannelAccessToken', None)
 # firebase_url = os.getenv('FIREBASE_URL')
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 handler = WebhookHandler(secret)
 configuration = Configuration(
     access_token=token
 )
 
-
 def linebot(request):
     body = request.get_data(as_text=True)
     json_data = json.loads(body)
     try:
-
         signature = request.headers['X-Line-Signature']
         handler.handle(body, signature)
         event = json_data['events'][0]
@@ -74,5 +70,5 @@ def linebot(request):
 
     except Exception as e:
         detail = e.args[0]
-        print(detail)
+        logger.error(detail)  # Changed print to logger.error
     return 'OK'
