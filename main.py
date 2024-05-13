@@ -1,3 +1,6 @@
+import logging
+import os
+import json
 from linebot.v3 import WebhookHandler
 from linebot.v3.messaging import (
     Configuration,
@@ -6,13 +9,16 @@ from linebot.v3.messaging import (
     ReplyMessageRequest,
     TextMessage
 )
-import json
-import os
-
 
 # 使用環境變量讀取憑證
 secret = os.getenv('ChannelSecret', None)
 token = os.getenv('ChannelAccessToken', None)
+# firebase_url = os.getenv('FIREBASE_URL')
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 handler = WebhookHandler(secret)
 configuration = Configuration(
@@ -59,5 +65,6 @@ def linebot(request):
                             TextMessage(text='你傳的不是文字訊息喔'),
                         ]))
     except Exception as e:
-        print(f"Error: {e}")
+        detail = e.args[0]
+        logger.error(detail)  # Changed print to logger.error
     return 'OK'
