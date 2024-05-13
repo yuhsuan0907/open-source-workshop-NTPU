@@ -10,12 +10,9 @@ from linebot.v3.messaging import (
     TextMessage
 )
 
-# 使用環境變量讀取憑證
 secret = os.getenv('ChannelSecret', None)
 token = os.getenv('ChannelAccessToken', None)
-# firebase_url = os.getenv('FIREBASE_URL')
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
