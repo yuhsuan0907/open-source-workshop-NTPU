@@ -7,8 +7,7 @@ from linebot.v3.messaging import (
     ApiClient,
     MessagingApi,
     ReplyMessageRequest,
-    TextMessage,
-    ShowLoadingAnimationRequest
+    TextMessage
 )
 
 # 使用環境變量讀取憑證
@@ -19,6 +18,7 @@ token = os.getenv('ChannelAccessToken', None)
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 handler = WebhookHandler(secret)
 configuration = Configuration(
@@ -36,19 +36,18 @@ def linebot(request):
         user_id = event['source']['userId']
         msg_type = event['message']['type']
 
-        if msg_type == 'text':
-            msg = event['message']['text']
+        with ApiClient(configuration) as api_client:
+            line_bot_api = MessagingApi(api_client)
 
-            with ApiClient(configuration) as api_client:
-                line_bot_api = MessagingApi(api_client)
-                line_bot_api.show_loading_animation(ShowLoadingAnimationRequest(
-                    chatId=user_id, loadingSeconds=20))
+            if msg_type == 'text':
+                msg = event['message']['text']
+                line_bot_api.show_loading_animation(chat_id=user_id, loading_seconds=20)
 
                 if msg == '!清空':
                     reply_msg = '已清空'
-                    # fdb.delete(user_chat_path, None)
+                    # Add functionality to clear data if needed
                 elif msg == '!摘要':
-                    reply_msg = msg # test
+                    reply_msg = '摘要功能正在開發中'
                 else:
                     reply_msg = "哈囉你好嗎"
 
@@ -58,16 +57,13 @@ def linebot(request):
                         messages=[
                             TextMessage(text=reply_msg),
                         ]))
-        else:
-            with ApiClient(configuration) as api_client:
-                line_bot_api = MessagingApi(api_client)
+            else:
                 line_bot_api.reply_message(
                     ReplyMessageRequest(
                         reply_token=reply_token,
                         messages=[
                             TextMessage(text='你傳的不是文字訊息喔'),
                         ]))
-
     except Exception as e:
         detail = e.args[0]
         logger.error(detail)  # Changed print to logger.error
