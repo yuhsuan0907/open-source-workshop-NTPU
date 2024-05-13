@@ -14,8 +14,6 @@ import os
 import requests
 from PIL import Image
 from io import BytesIO
-from firebase import firebase
-import google.generativeai as genai
 
 
 # 使用環境變量讀取憑證
